@@ -57,9 +57,44 @@ class RootWidgetState extends State<RootWidget> {
           [0, 1, 2].map((e) => 'assets/flutter/portf/$e.jpg').toSet(),
           githubUrl: 'https://github.com/niktob560/portfolio_web'),
     }),
-    Skill('C++', {}),
-    Skill('C', {}),
-    Skill('Bash', {}),
+    Skill('C++', {
+      Project(
+          'AVR-API',
+          'Zero-cost hardware abstraction layer for AVR MCU`s written in C++ with constexpr usage',
+          [2, 1, 0, 3, 4].map((e) => 'assets/cpp/avr-api/$e.jpg').toSet(),
+          githubUrl: 'https://github.com/niktob560/avr-api'),
+      Project(
+          'fantastic-train',
+          'Navigation system written in C++ based on Dijkstra`s algorithm with a GLUT monitor\nWas developed for running in AVR MCU, but project was paused',
+          [0].map((e) => 'assets/cpp/fantastic-train/$e.jpg').toSet(),
+          githubUrl: 'https://github.com/niktob560/fantastic-train'),
+      Project(
+          'MCU command coder',
+          'Binary protocol coder that provides multi-MCU data transmission',
+          {},
+          githubUrl: 'https://github.com/niktob560/fantastic-train'),
+    }),
+    Skill('C', {
+      Project(
+          'Coursework 2020',
+          'Firmware for a desktop clock with TTF touch screen written in C99 in compliance with the CERT standard',
+          [1, 0].map((e) => 'assets/c/cursach/$e.jpg').toSet(),
+          githubUrl: 'https://github.com/niktob560/cursach_2020')
+    }),
+    Skill('Bash', {
+      Project(
+        'netcat gpg chat',
+        'GPG-encrypted chat based on tmux and netcat written in bash',
+        [0, 1].map((e) => 'assets/bash/nc-gpg-chat/$e.jpg').toSet(),
+      ),
+      Project(
+          'MCU command highlighter and coder',
+          'MCU command-line additional tools for mcuterminaltranslator C++ project',
+          {'assets/bash/mcuterminal/0.jpg'},
+          youtubeVideoId: '96oaPGxbNkg',
+          githubUrl:
+              'https://github.com/niktob560/mcuterminaltranslator-highlighter')
+    }),
     Skill('Python', {}),
   };
 
