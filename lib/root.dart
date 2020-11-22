@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:responsive_scaffold/responsive_scaffold.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:portfolio_web/project.dart';
 import 'package:portfolio_web/skill.dart';
@@ -56,12 +58,8 @@ class RootWidgetState extends State<RootWidget> {
         'The simplest QR scanner for Google Play Market\nDone in 1 day',
         [0, 1, 2].map((e) => 'assets/flutter/qr_scanner/$e.jpg').toSet(),
       ),
-      Project(
-        'Automator',
-        'GTD management system app',
-        {},
-        youtubeVideoId: '1MU9qRKeUvM'
-      ),
+      Project('Automator', 'GTD management system app', {},
+          youtubeVideoId: '1MU9qRKeUvM'),
     }),
     Skill('C++', {
       Project(
@@ -74,10 +72,8 @@ class RootWidgetState extends State<RootWidget> {
           'Navigation system written in C++ based on Dijkstra`s algorithm with a GLUT monitor\nWas developed for running in AVR MCU, but project was paused',
           [0].map((e) => 'assets/cpp/fantastic-train/$e.jpg').toSet(),
           githubUrl: 'https://github.com/niktob560/fantastic-train'),
-      Project(
-          'MCU command coder',
-          'Binary protocol coder that provides multi-MCU data transmission',
-          {},
+      Project('MCU command coder',
+          'Binary protocol coder that provides multi-MCU data transmission', {},
           githubUrl: 'https://github.com/niktob560/fantastic-train'),
     }),
     Skill('C', {
@@ -106,14 +102,12 @@ class RootWidgetState extends State<RootWidget> {
           'Crewmarine API server',
           'API server for https://crewmarine.eu web site written with django-ninja',
           {},
-          githubUrl: 'https://github.com/niktob560/seajobs_server'
-      ),
+          githubUrl: 'https://github.com/niktob560/seajobs_server'),
       Project(
           'GTD API server',
           'API server for automator flutter app written with django-ninja',
           {'assets/python/gtd/0.jpg'},
-          githubUrl: 'https://github.com/niktob560/GTD-automate'
-      ),
+          githubUrl: 'https://github.com/niktob560/GTD-automate'),
     }),
   };
 
@@ -135,14 +129,51 @@ class RootWidgetState extends State<RootWidget> {
           ),
           decoration: BoxDecoration(color: Colors.blue),
         )
-      ]..addAll(skills
-              .map((final e) => ListTile(
-                    title: Text(e.name),
-                    subtitle: Text('Projects: ${e.projects.length}'),
-                    onTap: () => setState(() => _currentSkill = e),
-                    selected: e == currentSkill,
-                  ))
-              .toList())),
+      ]
+            ..addAll(skills
+                .map((final e) => ListTile(
+                      title: Text(e.name),
+                      subtitle: Text('Projects: ${e.projects.length}'),
+                      onTap: () => setState(() => _currentSkill = e),
+                      selected: e == currentSkill,
+                    ))
+                .toList())
+            ..addAll([
+              const Divider(),
+              Padding(
+                  padding: EdgeInsets.all(32),
+                  child: Text(
+                    'Only large projects are presented here\n\nMade with flutter',
+                    style: TextStyle(color: Colors.white54),
+                    textAlign: TextAlign.center,
+                  )),
+              Padding(
+                  padding: EdgeInsets.all(32),
+                  child: GestureDetector(
+                    child: SizedBox(
+                        height: 64,
+                        child: GestureDetector(
+                            onTap: () async {
+                              if (await canLaunch(
+                                  'https://github.com/niktob560'))
+                                await launch('https://github.com/niktob560');
+                              else
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text('Failed'),
+                                ));
+                            },
+                            child: CachedNetworkImage(
+                              imageUrl: 'assets/github_badge_dark.png',
+                              fit: BoxFit.fitHeight,
+                              placeholder: (context, uri) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.error,
+                                size: 64,
+                              ),
+                            ))),
+                  )),
+            ])),
       body: Center(
         child: SkillWidget(currentSkill),
       ),
@@ -153,8 +184,8 @@ class RootWidgetState extends State<RootWidget> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 1))
-        .then((value) => _showDisclaimerDialog());
+    // Future.delayed(Duration(seconds: 1))
+    //     .then((value) => _showDisclaimerDialog());
   }
 
   Future<void> _showDisclaimerDialog() async {
