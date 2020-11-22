@@ -54,12 +54,14 @@ class SkillWidget extends StatelessWidget {
                           e.name,
                           style: TextStyle(fontSize: 32),
                         ),
-                        Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Text(
-                              e.description,
-                              style: TextStyle(fontSize: 16),
-                            )),
+                        Container(
+                            width: double.infinity,
+                            child: Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Text(
+                                  e.description,
+                                  style: TextStyle(fontSize: 16),
+                                ))),
                         SizedBox(
                           //Images carousel
                           height: MediaQuery.of(context).size.longestSide / 3,
