@@ -68,7 +68,8 @@ class SkillWidget extends StatelessWidget {
                                       e.description,
                                       style: TextStyle(fontSize: 16),
                                     ))),
-                            e.screenshotAssets.length == 0
+                            (e.screenshotAssets.length == 0 &&
+                                    e.youtubeVideoId.isEmpty)
                                 ? const SizedBox()
                                 : SizedBox(
                                     //Images carousel

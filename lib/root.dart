@@ -48,14 +48,20 @@ class RootWidgetState extends State<RootWidget> {
           youtubeVideoId: 'm2IB5Tn9VvM'),
     }),
     Skill('Flutter', {
+      Project('Portfolio web site', 'This site\nDone in 1 week',
+          [0, 1, 2].map((e) => 'assets/flutter/portf/$e.jpg').toSet(),
+          githubUrl: 'https://github.com/niktob560/portfolio_web'),
       Project(
         'QR scanner',
         'The simplest QR scanner for Google Play Market\nDone in 1 day',
         [0, 1, 2].map((e) => 'assets/flutter/qr_scanner/$e.jpg').toSet(),
       ),
-      Project('Portfolio web site', 'This site\nDone in 1 week',
-          [0, 1, 2].map((e) => 'assets/flutter/portf/$e.jpg').toSet(),
-          githubUrl: 'https://github.com/niktob560/portfolio_web'),
+      Project(
+        'Automator',
+        'GTD management system app',
+        {},
+        youtubeVideoId: '1MU9qRKeUvM'
+      ),
     }),
     Skill('C++', {
       Project(
