@@ -90,38 +90,36 @@ class SkillWidget extends StatelessWidget {
                                           ),
                                         )
                                       : e.youtubeVideoId.isNotEmpty
-                                          ? Card(
-                                              child: GestureDetector(
-                                                child: SizedBox(
-                                                    height: 64,
-                                                    width: 64,
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: 'assets/yt.png',
-                                                      fit: BoxFit.fitWidth,
-                                                      placeholder: (context,
-                                                              uri) =>
-                                                          Center(
-                                                              child:
-                                                                  CircularProgressIndicator()),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          Icon(
-                                                        Icons.error,
-                                                        size: 64,
-                                                      ),
-                                                    )),
-                                                onTap: () async {
-                                                  if (await canLaunch(
-                                                      'https://youtu.be/${e.youtubeVideoId}'))
-                                                    await launch(
-                                                        'https://youtu.be/${e.youtubeVideoId}');
-                                                  else
-                                                    Scaffold.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: Text('Failed'),
-                                                    ));
-                                                },
-                                              ),
+                                          ? GestureDetector(
+                                              child: SizedBox(
+                                                  height: 64,
+                                                  width: 64,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: 'assets/yt.png',
+                                                    fit: BoxFit.fitWidth,
+                                                    placeholder: (context,
+                                                            uri) =>
+                                                        Center(
+                                                            child:
+                                                                CircularProgressIndicator()),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Icon(
+                                                      Icons.error,
+                                                      size: 64,
+                                                    ),
+                                                  )),
+                                              onTap: () async {
+                                                if (await canLaunch(
+                                                    'https://youtu.be/${e.youtubeVideoId}'))
+                                                  await launch(
+                                                      'https://youtu.be/${e.youtubeVideoId}');
+                                                else
+                                                  Scaffold.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text('Failed'),
+                                                  ));
+                                              },
                                             )
                                           : Card()
                                 ]..addAll(e.screenshotAssets
