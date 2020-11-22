@@ -35,6 +35,8 @@ class Skill {
 
 class SkillWidget extends StatelessWidget {
   final Skill skill;
+  final ghImage = AssetImage('assets/github_badge_dark.png'),
+        gpmImage = AssetImage('assets/gpm.png');
 
   SkillWidget(this.skill);
 
@@ -47,6 +49,7 @@ class SkillWidget extends StatelessWidget {
             isAlwaysShown: true,
             controller: _scrollController,
             child: ListView(
+              controller: _scrollController,
               children: skill.projects
                   .map((e) => Padding(
                       padding: EdgeInsets.all(8),
@@ -82,87 +85,7 @@ class SkillWidget extends StatelessWidget {
                                       child: ListView(
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          children: <Widget>[
-                                            const SizedBox(width: 4),
-                                            (MediaQuery.of(context)
-                                                            .size
-                                                            .longestSide ==
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width &&
-                                                    e.youtubeVideoId.isNotEmpty)
-                                                ? Card(
-                                                    child: YoutubePlayerIFrame(
-                                                      controller: YoutubePlayerController(
-                                                          initialVideoId:
-                                                              e.youtubeVideoId,
-                                                          params: YoutubePlayerParams(
-                                                              showControls:
-                                                                  false,
-                                                              autoPlay: false,
-                                                              loop: true,
-                                                              showFullscreenButton:
-                                                                  false)),
-                                                      aspectRatio: 9 / 16,
-                                                    ),
-                                                  )
-                                                : e.youtubeVideoId.isNotEmpty
-                                                    ? GestureDetector(
-                                                        child: SizedBox(
-                                                            height: 64,
-                                                            width: 64,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl:
-                                                                  'assets/yt.png',
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                              placeholder: (context,
-                                                                      uri) =>
-                                                                  Center(
-                                                                      child:
-                                                                          CircularProgressIndicator()),
-                                                              errorWidget:
-                                                                  (context, url,
-                                                                          error) =>
-                                                                      Icon(
-                                                                Icons.error,
-                                                                size: 64,
-                                                              ),
-                                                            )),
-                                                        onTap: () async {
-                                                          if (await canLaunch(
-                                                              'https://youtu.be/${e.youtubeVideoId}'))
-                                                            await launch(
-                                                                'https://youtu.be/${e.youtubeVideoId}');
-                                                          else
-                                                            Scaffold.of(context)
-                                                                .showSnackBar(
-                                                                    SnackBar(
-                                                              content: Text(
-                                                                  'Failed'),
-                                                            ));
-                                                        },
-                                                      )
-                                                    : Card()
-                                          ]..addAll(e.screenshotAssets
-                                              .map((i) => Card(
-                                                      child: CachedNetworkImage(
-                                                    imageUrl: i,
-                                                    fit: BoxFit.fill,
-                                                    placeholder: (context,
-                                                            uri) =>
-                                                        Center(
-                                                            child:
-                                                                CircularProgressIndicator()),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Icon(
-                                                      Icons.error,
-                                                      size: 128,
-                                                    ),
-                                                  )))
-                                              .toList(growable: false))),
+                                          children: e.carousel),
                                     ),
                                   ),
                             (e.githubUrl.isNotEmpty ||
@@ -190,22 +113,7 @@ class SkillWidget extends StatelessWidget {
                                                               Text('Failed'),
                                                         ));
                                                     },
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          'assets/gpm.png',
-                                                      fit: BoxFit.fill,
-                                                      placeholder: (context,
-                                                              uri) =>
-                                                          Center(
-                                                              child:
-                                                                  CircularProgressIndicator()),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          Icon(
-                                                        Icons.error,
-                                                        size: 64,
-                                                      ),
-                                                    )))
+                                                    child: Image(image: gpmImage,)))
                                             : const SizedBox(),
                                         (e.githubUrl.isNotEmpty)
                                             ? SizedBox(
@@ -224,22 +132,7 @@ class SkillWidget extends StatelessWidget {
                                                               Text('Failed'),
                                                         ));
                                                     },
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          'assets/github_badge_dark.png',
-                                                      fit: BoxFit.fill,
-                                                      placeholder: (context,
-                                                              uri) =>
-                                                          Center(
-                                                              child:
-                                                                  CircularProgressIndicator()),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          Icon(
-                                                        Icons.error,
-                                                        size: 64,
-                                                      ),
-                                                    )))
+                                                    child: Image(image: ghImage,)))
                                             : const SizedBox(),
                                       ]
                                           .map((e) => Padding(
