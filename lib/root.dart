@@ -95,7 +95,20 @@ class RootWidgetState extends State<RootWidget> {
           githubUrl:
               'https://github.com/niktob560/mcuterminaltranslator-highlighter')
     }),
-    Skill('Python', {}),
+    Skill('Python', {
+      Project(
+          'Crewmarine API server',
+          'API server for https://crewmarine.eu web site written with django-ninja',
+          {},
+          githubUrl: 'https://github.com/niktob560/seajobs_server'
+      ),
+      Project(
+          'GTD API server',
+          'API server for automator flutter app written with django-ninja',
+          {'assets/python/gtd/0.jpg'},
+          githubUrl: 'https://github.com/niktob560/GTD-automate'
+      ),
+    }),
   };
 
   Skill _currentSkill;
