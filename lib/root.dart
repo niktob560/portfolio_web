@@ -59,7 +59,8 @@ class RootWidgetState extends State<RootWidget> {
         [0, 1, 2].map((e) => 'assets/flutter/qr_scanner/$e.jpg').toSet(),
       ),
       Project('Automator', 'GTD management system app', {},
-          youtubeVideoId: '1MU9qRKeUvM'),
+          youtubeVideoId: '1MU9qRKeUvM',
+          githubUrl: 'https://github.com/niktob560/automator'),
     }),
     Skill('C++', {
       Project(
@@ -85,10 +86,10 @@ class RootWidgetState extends State<RootWidget> {
     }),
     Skill('Bash', {
       Project(
-        'netcat gpg chat',
-        'GPG-encrypted chat based on tmux and netcat written in bash',
-        [0, 1].map((e) => 'assets/bash/nc-gpg-chat/$e.jpg').toSet(),
-      ),
+          'netcat gpg chat',
+          'GPG-encrypted chat based on tmux and netcat written in bash',
+          [0, 1].map((e) => 'assets/bash/nc-gpg-chat/$e.jpg').toSet(),
+          githubUrl: 'https://github.com/niktob560/nc-bash-gpg-chat'),
       Project(
           'MCU command highlighter and coder',
           'MCU command-line additional tools for mcuterminaltranslator C++ project',
