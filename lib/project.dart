@@ -3,77 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 @immutable
 class Project {
   final String name, description, youtubeVideoId, githubUrl, playMarketUrl;
-  final Set<String> screenshotAssets;
+  final Set<AssetImage> screenshotImages;
 
-  List<Widget> _carousel;
-
-  List<Widget> get carousel => _carousel;
-
-  Project(this.name, this.description, this.screenshotAssets,
-      {this.youtubeVideoId = '', this.githubUrl = '', this.playMarketUrl = ''});
-
-  draw(context) {
-    _carousel = [
-      const SizedBox(width: 4),
-      (MediaQuery.of(context).size.longestSide ==
-                  MediaQuery.of(context).size.width &&
-              youtubeVideoId.isNotEmpty)
-          ? Card(
-              child: YoutubePlayerIFrame(
-                controller: YoutubePlayerController(
-                    initialVideoId: youtubeVideoId,
-                    params: YoutubePlayerParams(
-                        showControls: false,
-                        autoPlay: false,
-                        loop: true,
-                        showFullscreenButton: false)),
-                aspectRatio: 9 / 16,
-              ),
-            )
-          : youtubeVideoId.isNotEmpty
-              ? GestureDetector(
-                  child: SizedBox(
-                      height: 64,
-                      width: 64,
-                      child: CachedNetworkImage(
-                        imageUrl: 'assets/yt.png',
-                        fit: BoxFit.fitWidth,
-                        placeholder: (context, uri) =>
-                            Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => Icon(
-                          Icons.error,
-                          size: 64,
-                        ),
-                      )),
-                  onTap: () async {
-                    if (await canLaunch('https://youtu.be/${youtubeVideoId}'))
-                      await launch('https://youtu.be/${youtubeVideoId}');
-                    else
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed'),
-                      ));
-                  },
-                )
-              : Card()
-    ]..addAll(screenshotAssets
-        .map((i) => Card(
-                child: CachedNetworkImage(
-              imageUrl: i,
-              fit: BoxFit.fill,
-              placeholder: (context, uri) =>
-                  Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => Icon(
-                Icons.error,
-                size: 128,
-              ),
-            )))
-        .toList(growable: false));
-  }
+  Project(this.name, this.description, Set<String> screenshotAssets,
+      {this.youtubeVideoId = '', this.githubUrl = '', this.playMarketUrl = ''})
+      : screenshotImages = screenshotAssets.map((e) => AssetImage(e)).toSet();
 
   @override
   bool operator ==(Object other) =>
@@ -85,7 +23,7 @@ class Project {
           youtubeVideoId == other.youtubeVideoId &&
           githubUrl == other.githubUrl &&
           playMarketUrl == other.playMarketUrl &&
-          screenshotAssets == other.screenshotAssets;
+          screenshotImages == other.screenshotImages;
 
   @override
   int get hashCode =>
@@ -94,16 +32,145 @@ class Project {
       youtubeVideoId.hashCode ^
       githubUrl.hashCode ^
       playMarketUrl.hashCode ^
-      screenshotAssets.hashCode;
+      screenshotImages.hashCode;
 }
 
 class ProjectWidget extends StatelessWidget {
   final Project project;
+  final ghImage = AssetImage('assets/github_badge_dark.png'),
+      gpmImage = AssetImage('assets/gpm.png'),
+      ytImage = AssetImage('assets/yt.png');
 
   ProjectWidget(this.project);
 
   @override
-  Widget build(BuildContext context) => ListView(
-        children: [Text(project.name, textAlign: TextAlign.center)],
+  Widget build(BuildContext context) => Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 16),
+            Text(
+              //Title
+              project.name,
+              style: TextStyle(fontSize: 32),
+            ),
+            Container(
+                width: double.infinity,
+                child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      project.description,
+                      style: TextStyle(fontSize: 16),
+                    ))),
+            (project.screenshotImages.length == 0 &&
+                    project.youtubeVideoId.isEmpty)
+                ? const SizedBox()
+                : SizedBox(
+                    //Images carousel
+                    height: MediaQuery.of(context).size.longestSide / 3,
+                    child: Scrollbar(
+                      radius: Radius.circular(2),
+                      child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            const SizedBox(width: 4),
+                            (MediaQuery.of(context).size.longestSide ==
+                                        MediaQuery.of(context).size.width &&
+                                    project.youtubeVideoId.isNotEmpty)
+                                ? Card(
+                                    child: YoutubePlayerIFrame(
+                                      controller: YoutubePlayerController(
+                                          initialVideoId:
+                                              project.youtubeVideoId,
+                                          params: YoutubePlayerParams(
+                                              showControls: false,
+                                              autoPlay: false,
+                                              loop: true,
+                                              showFullscreenButton: false)),
+                                      aspectRatio: 9 / 16,
+                                    ),
+                                  )
+                                : project.youtubeVideoId.isNotEmpty
+                                    ? GestureDetector(
+                                        child: SizedBox(
+                                            height: 64,
+                                            width: 64,
+                                            child: Image(
+                                              image: ytImage,
+                                              fit: BoxFit.fitWidth,
+                                            )),
+                                        onTap: () async {
+                                          if (await canLaunch(
+                                              'https://youtu.be/${project.youtubeVideoId}'))
+                                            await launch(
+                                                'https://youtu.be/${project.youtubeVideoId}');
+                                          else
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text('Failed'),
+                                            ));
+                                        },
+                                      )
+                                    : Card()
+                          ]..addAll(project.screenshotImages
+                              .map((i) => Card(
+                                      child: Image(
+                                    image: i,
+                                    fit: BoxFit.fill,
+                                  )))
+                              .toList(growable: false))),
+                    ),
+                  ),
+            (project.githubUrl.isNotEmpty || project.playMarketUrl.isNotEmpty)
+                ? Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (project.playMarketUrl.isNotEmpty)
+                            ? SizedBox(
+                                height: 64,
+                                child: GestureDetector(
+                                    onTap: () async {
+                                      if (await canLaunch(
+                                          project.playMarketUrl))
+                                        await launch(project.playMarketUrl);
+                                      else
+                                        Scaffold.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Failed'),
+                                        ));
+                                    },
+                                    child: Image(
+                                      image: gpmImage,
+                                    )))
+                            : const SizedBox(),
+                        (project.githubUrl.isNotEmpty)
+                            ? SizedBox(
+                                height: 64,
+                                child: GestureDetector(
+                                    onTap: () async {
+                                      if (await canLaunch(project.githubUrl))
+                                        await launch(project.githubUrl);
+                                      else
+                                        Scaffold.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Failed'),
+                                        ));
+                                    },
+                                    child: Image(
+                                      image: ghImage,
+                                    )))
+                            : const SizedBox(),
+                      ]
+                          .map((e) => Padding(
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              child: e))
+                          .toList(growable: false),
+                    ))
+                : const Divider()
+          ],
+        ),
       );
 }
